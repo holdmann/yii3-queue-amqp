@@ -36,7 +36,10 @@ use Yiisoft\Test\Support\Container\SimpleContainer;
  */
 abstract class UnitTestCase extends MainTestCase
 {
-    protected Queue|null $queue = null;
+    /**
+     * @var \Yiisoft\Queue\Queue|null
+     */
+    protected $queue = null;
     protected ?WorkerInterface $worker = null;
     protected ?ContainerInterface $container = null;
     protected ?AdapterInterface $adapter = null;

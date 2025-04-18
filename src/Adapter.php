@@ -17,14 +17,26 @@ use Yiisoft\Queue\Message\MessageSerializerInterface;
 
 final class Adapter implements AdapterInterface
 {
-    public function __construct(
-        private QueueProviderInterface $queueProvider,
-        private readonly MessageSerializerInterface $serializer,
-        private readonly LoopInterface $loop,
-    ) {
+    private QueueProviderInterface $queueProvider;
+    /**
+     * @readonly
+     */
+    private MessageSerializerInterface $serializer;
+    /**
+     * @readonly
+     */
+    private LoopInterface $loop;
+    public function __construct(QueueProviderInterface $queueProvider, MessageSerializerInterface $serializer, LoopInterface $loop)
+    {
+        $this->queueProvider = $queueProvider;
+        $this->serializer = $serializer;
+        $this->loop = $loop;
     }
 
-    public function withChannel(BackedEnum|string $channel): self
+    /**
+     * @param \BackedEnum|string $channel
+     */
+    public function withChannel($channel): self
     {
         $instance = clone $this;
         $channelName = is_string($channel) ? $channel : (string) $channel->value;
@@ -47,8 +59,9 @@ final class Adapter implements AdapterInterface
 
     /**
      * @return never
+     * @param int|string $id
      */
-    public function status(int|string $id): JobStatus
+    public function status($id): JobStatus
     {
         throw new NotImplementedException('Status check is not supported by the adapter ' . self::class . '.');
     }
@@ -58,14 +71,14 @@ final class Adapter implements AdapterInterface
         $payload = $this->serializer->serialize($message);
         $amqpMessage = new AMQPMessage(
             $payload,
-            array_merge(['message_id' => uniqid(more_entropy: true)], $this->queueProvider->getMessageProperties())
+            array_merge(['message_id' => uniqid('', true)], $this->queueProvider->getMessageProperties())
         );
         $exchangeSettings = $this->queueProvider->getExchangeSettings();
         $this->queueProvider
             ->getChannel()
             ->basic_publish(
                 $amqpMessage,
-                $exchangeSettings?->getName() ?? '',
+                (($nullsafeVariable1 = $exchangeSettings) ? $nullsafeVariable1->getName() : null) ?? '',
                 $exchangeSettings ? '' : $this->queueProvider
                     ->getQueueSettings()
                     ->getName()

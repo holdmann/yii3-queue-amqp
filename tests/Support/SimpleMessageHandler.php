@@ -8,8 +8,13 @@ use Yiisoft\Queue\Message\MessageInterface;
 
 final class SimpleMessageHandler
 {
-    public function __construct(private readonly FileHelper $fileHelper)
+    /**
+     * @readonly
+     */
+    private FileHelper $fileHelper;
+    public function __construct(FileHelper $fileHelper)
     {
+        $this->fileHelper = $fileHelper;
     }
 
     public function __invoke(MessageInterface $message): void

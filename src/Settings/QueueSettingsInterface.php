@@ -8,7 +8,10 @@ use PhpAmqpLib\Wire\AMQPTable;
 
 interface QueueSettingsInterface
 {
-    public function getArguments(): AMQPTable|array;
+    /**
+     * @return \PhpAmqpLib\Wire\AMQPTable|mixed[]
+     */
+    public function getArguments();
 
     public function getName(): string;
 
@@ -35,7 +38,10 @@ interface QueueSettingsInterface
      */
     public function getPositionalSettings(): array;
 
-    public function withArguments(AMQPTable|array $arguments): self;
+    /**
+     * @param \PhpAmqpLib\Wire\AMQPTable|mixed[] $arguments
+     */
+    public function withArguments($arguments): self;
 
     public function withName(string $name): self;
 

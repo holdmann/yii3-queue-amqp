@@ -21,14 +21,24 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/holdmann/yii3-queue"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/holdmann/yii3-factory"
+        }
+    ],
     "require": {
-        "php": "^8.1",
+        "php": "^7.4|^8.1",
         "ext-json": "*",
         "ext-sockets": "*",
         "php-amqplib/php-amqplib": "^3.1.0",
-        "yiisoft/factory": "^1.0",
+        "yiisoft/factory": "dev-php7.4",
         "yiisoft/friendly-exception": "^1.0",
-        "yiisoft/queue": "dev-master"
+        "yiisoft/queue": "dev-php7.4"
     },
     "require-dev": {
         "infection/infection": "^0.27.8||^0.29.0",

@@ -15,11 +15,23 @@ use Yiisoft\Queue\Message\MessageSerializerInterface;
 
 final class FakeAdapter implements AdapterInterface
 {
-    public function __construct(
-        private readonly QueueProviderInterface $queueProvider,
-        private readonly MessageSerializerInterface $serializer,
-        private readonly LoopInterface $loop,
-    ) {
+    /**
+     * @readonly
+     */
+    private QueueProviderInterface $queueProvider;
+    /**
+     * @readonly
+     */
+    private MessageSerializerInterface $serializer;
+    /**
+     * @readonly
+     */
+    private LoopInterface $loop;
+    public function __construct(QueueProviderInterface $queueProvider, MessageSerializerInterface $serializer, LoopInterface $loop)
+    {
+        $this->queueProvider = $queueProvider;
+        $this->serializer = $serializer;
+        $this->loop = $loop;
     }
 
     public function runExisting(callable $handlerCallback): void
@@ -27,7 +39,10 @@ final class FakeAdapter implements AdapterInterface
         throw new LogicException('Method not implemented');
     }
 
-    public function status(int|string $id): JobStatus
+    /**
+     * @param int|string $id
+     */
+    public function status($id): JobStatus
     {
         throw new LogicException('Method not implemented');
     }
@@ -42,7 +57,10 @@ final class FakeAdapter implements AdapterInterface
         throw new LogicException('Method not implemented');
     }
 
-    public function withChannel(BackedEnum|string $channel): AdapterInterface
+    /**
+     * @param \BackedEnum|string $channel
+     */
+    public function withChannel($channel): AdapterInterface
     {
         throw new LogicException('Method not implemented');
     }

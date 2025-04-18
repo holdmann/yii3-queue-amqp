@@ -17,8 +17,15 @@ use Yiisoft\Queue\Middleware\Push\PushRequest;
 
 final class DelayMiddleware implements DelayMiddlewareInterface
 {
-    public function __construct(private float $delayInSeconds, private readonly bool $forcePersistentMessages = true)
+    private float $delayInSeconds;
+    /**
+     * @readonly
+     */
+    private bool $forcePersistentMessages = true;
+    public function __construct(float $delayInSeconds, bool $forcePersistentMessages = true)
     {
+        $this->delayInSeconds = $delayInSeconds;
+        $this->forcePersistentMessages = $forcePersistentMessages;
     }
 
     /**
@@ -87,7 +94,7 @@ final class DelayMiddleware implements DelayMiddlewareInterface
             ->withAutoDeletable(true)
             ->withArguments(
                 [
-                    'x-dead-letter-exchange' => ['S', $exchangeSettings?->getName() ?? ''],
+                    'x-dead-letter-exchange' => ['S', (($nullsafeVariable1 = $exchangeSettings) ? $nullsafeVariable1->getName() : null) ?? ''],
                     'x-expires' => ['I', $this->delayInSeconds * 1000 + 30000],
                     'x-message-ttl' => ['I', $this->delayInSeconds * 1000],
                 ]
@@ -102,9 +109,7 @@ final class DelayMiddleware implements DelayMiddlewareInterface
     private function getExchangeSettings(?ExchangeSettingsInterface $exchangeSettings): ?ExchangeSettingsInterface
     {
         /** @noinspection NullPointerExceptionInspection */
-        return $exchangeSettings
-            ?->withName("{$exchangeSettings->getName()}.dlx")
-            ->withAutoDelete(true)
+        return (($nullsafeVariable2 = $exchangeSettings) ? $nullsafeVariable2->withName("{$exchangeSettings->getName()}.dlx")->withAutoDelete(true) : null)
             ->withType(AMQPExchangeType::TOPIC);
     }
 }

@@ -13,16 +13,27 @@ use Yiisoft\Queue\AMQP\Settings\QueueSettingsInterface;
 
 final class QueueProvider implements QueueProviderInterface
 {
+    /**
+     * @readonly
+     */
+    private AbstractConnection $connection;
+    private QueueSettingsInterface $queueSettings;
+    private ?ExchangeSettingsInterface $exchangeSettings = null;
+    private array $messageProperties = [];
     public const EXCHANGE_NAME_DEFAULT = 'yii-queue';
 
     private ?AMQPChannel $channel = null;
 
     public function __construct(
-        private readonly AbstractConnection $connection,
-        private QueueSettingsInterface $queueSettings,
-        private ?ExchangeSettingsInterface $exchangeSettings = null,
-        private array $messageProperties = [],
+        AbstractConnection $connection,
+        QueueSettingsInterface $queueSettings,
+        ?ExchangeSettingsInterface $exchangeSettings = null,
+        array $messageProperties = []
     ) {
+        $this->connection = $connection;
+        $this->queueSettings = $queueSettings;
+        $this->exchangeSettings = $exchangeSettings;
+        $this->messageProperties = $messageProperties;
         if ($this->exchangeSettings === null) {
             $this->exchangeSettings = new Exchange(self::EXCHANGE_NAME_DEFAULT);
         }
@@ -30,7 +41,7 @@ final class QueueProvider implements QueueProviderInterface
 
     public function __destruct()
     {
-        $this->channel?->close();
+        ($nullsafeVariable1 = $this->channel) ? $nullsafeVariable1->close() : null;
     }
 
     public function getChannel(): AMQPChannel

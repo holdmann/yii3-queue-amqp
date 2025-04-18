@@ -31,7 +31,7 @@ final class QueueTest extends UnitTestCase
     public function testStatus(): void
     {
         $adapter = $this->getAdapter();
-        $adapterClass = $adapter::class;
+        $adapterClass = get_class($adapter);
 
         $queue = $this->getDefaultQueue($adapter);
 

@@ -25,12 +25,13 @@ final class QueueSettingsTest extends UnitTestCase
             $queueProvider
                 ->withQueueSettings(
                     new QueueSettings(
-                        queueName: 'yii-queue-test-queue-common-settings',
-                        passive: true,
-                        durable: true,
-                        exclusive: true,
-                        nowait: true,
-                        arguments: new AMQPTable([
+                        'yii-queue-test-queue-common-settings',
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        new AMQPTable([
                             'x-dead-letter-exchange' => 'yii-queue-test-queue-common-settings-dead-letter-exc',
                             'x-message-ttl' => 15000,
                             'x-expires' => 16000,
@@ -76,8 +77,13 @@ final class QueueSettingsTest extends UnitTestCase
             $queueProvider
                 ->withQueueSettings(
                     new QueueSettings(
-                        queueName: 'yii-queue-test-queue-settings-arg',
-                        arguments: new AMQPTable([
+                        'yii-queue-test-queue-settings-arg',
+                        false,
+                        false,
+                        false,
+                        true,
+                        false,
+                        new AMQPTable([
                             'x-expires' => 1600,
                         ])
                     )

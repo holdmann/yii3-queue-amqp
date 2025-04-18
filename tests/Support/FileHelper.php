@@ -12,7 +12,7 @@ final class FileHelper
      * @param string $fileName File to be created
      * @param int|string $data Data to be written into the file
      */
-    public function put(string $fileName, int|string $data): void
+    public function put(string $fileName, $data): void
     {
         if (file_put_contents("{$this->getRuntimeDir()}/$fileName", $data) === false) {
             throw new RuntimeException("Runtime dir {$this->getRuntimeDir()} or file $fileName are not writable.");
@@ -43,7 +43,7 @@ final class FileHelper
     {
         $files = glob("{$this->getRuntimeDir()}/*");
         foreach ($files as $file) {
-            if (is_file($file) && !str_ends_with($file, '.log')) {
+            if (is_file($file) && substr_compare($file, '.log', -strlen('.log')) !== 0) {
                 unlink($file);
             }
         }

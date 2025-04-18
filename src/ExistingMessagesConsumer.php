@@ -15,13 +15,25 @@ use Yiisoft\Queue\Message\MessageSerializerInterface;
  */
 final class ExistingMessagesConsumer
 {
+    /**
+     * @readonly
+     */
+    private AMQPChannel $channel;
+    /**
+     * @readonly
+     */
+    private string $queueName;
+    /**
+     * @readonly
+     */
+    private MessageSerializerInterface $serializer;
     private bool $messageConsumed = false;
 
-    public function __construct(
-        private readonly AMQPChannel $channel,
-        private readonly string $queueName,
-        private readonly MessageSerializerInterface $serializer
-    ) {
+    public function __construct(AMQPChannel $channel, string $queueName, MessageSerializerInterface $serializer)
+    {
+        $this->channel = $channel;
+        $this->queueName = $queueName;
+        $this->serializer = $serializer;
     }
 
     /**

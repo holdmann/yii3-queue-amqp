@@ -9,19 +9,36 @@ use Yiisoft\Queue\QueueInterface;
 
 final class Queue implements QueueSettingsInterface
 {
-    public function __construct(
-        private string $queueName = QueueInterface::DEFAULT_CHANNEL,
-        private bool $passive = false,
-        private bool $durable = false,
-        private bool $exclusive = false,
-        private bool $autoDelete = true,
-        private bool $nowait = false,
-        private AMQPTable|array $arguments = [],
-        private ?int $ticket = null
-    ) {
+    private string $queueName = QueueInterface::DEFAULT_CHANNEL;
+    private bool $passive = false;
+    private bool $durable = false;
+    private bool $exclusive = false;
+    private bool $autoDelete = true;
+    private bool $nowait = false;
+    /**
+     * @var \PhpAmqpLib\Wire\AMQPTable|mixed[]
+     */
+    private $arguments = [];
+    private ?int $ticket = null;
+    /**
+     * @param \PhpAmqpLib\Wire\AMQPTable|mixed[] $arguments
+     */
+    public function __construct(string $queueName = QueueInterface::DEFAULT_CHANNEL, bool $passive = false, bool $durable = false, bool $exclusive = false, bool $autoDelete = true, bool $nowait = false, $arguments = [], ?int $ticket = null)
+    {
+        $this->queueName = $queueName;
+        $this->passive = $passive;
+        $this->durable = $durable;
+        $this->exclusive = $exclusive;
+        $this->autoDelete = $autoDelete;
+        $this->nowait = $nowait;
+        $this->arguments = $arguments;
+        $this->ticket = $ticket;
     }
 
-    public function getArguments(): AMQPTable|array
+    /**
+     * @return \PhpAmqpLib\Wire\AMQPTable|mixed[]
+     */
+    public function getArguments()
     {
         return $this->arguments;
     }
@@ -88,7 +105,10 @@ final class Queue implements QueueSettingsInterface
         return $instance;
     }
 
-    public function withArguments(AMQPTable|array $arguments): self
+    /**
+     * @param \PhpAmqpLib\Wire\AMQPTable|mixed[] $arguments
+     */
+    public function withArguments($arguments): self
     {
         $new = clone $this;
         $new->arguments = $arguments;
